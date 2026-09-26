@@ -1,0 +1,30 @@
+name: Bao mat
+
+# Repo nay KHONG chua pipeline. No goi pipeline dung chung o repo
+# vhuy811/VulnShop-DevSecOps. Sua pipeline o do, moi repo goi toi deu nhan.
+#
+# Ung dung nay co san lo hong CO Y (xem ground_truth.csv). Bon lo hong do la
+# "no cu": pipeline biet chung, bao cao chung, nhung KHONG chan PR cua nguoi
+# khong gay ra chung - nho baseline. Cong chi chan lo hong MOI.
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+# Bat buoc khi goi workflow khac: thieu khoi nay thi "Startup failure" ngay.
+permissions:
+  contents: read
+  security-events: write
+
+jobs:
+  security:
+    uses: vhuy811/VulnShop-DevSecOps/.github/workflows/devsecops-reusable.yml@main
+    with:
+      project-file: VulnShop.csproj
+      health-path: /Product/List
+      run-dast: true
+      title: VulnShop
+      # Ghim tag thay vi main khi bo cong cu da on dinh:
+      # toolkit-ref: v1.0.0
+    secrets: inherit
