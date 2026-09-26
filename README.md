@@ -1,6 +1,6 @@
 # VulnShop
 
-Ứng dụng ASP.NET Core **cố ý có lỗ hổng**, dùng làm mục tiêu kiểm thử cho pipeline DevSecOps ở [vhuy811/DevSecOps](https://github.com/vhuy811/DevSecOps).
+Ứng dụng ASP.NET Core **cố ý có lỗ hổng**, dùng làm mục tiêu kiểm thử cho pipeline DevSecOps ở [vhuy811/DevSecOps_VHNAT](https://github.com/vhuy811/DevSecOps_VHNAT).
 
 **Chỉ chạy trên localhost. Không bao giờ triển khai.**
 
