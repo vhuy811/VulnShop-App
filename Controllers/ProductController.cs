@@ -5,19 +5,22 @@ using VulnShop.Data;
 
 namespace VulnShop.Controllers;
 
-// Cac action duoc gieo loi co chu dich phuc vu do an.
-// Doi chieu day du trong ground_truth.csv o thu muc goc.
+// Ban tren tag `ground-truth` co bon lo hong gieo co y (C1-C4) de danh gia
+// pipeline; ket qua doi chieu nam trong ground_truth.csv.
+//
+// Ban tren main nay DA VA ca bon. Day la diem xuat phat SACH cho kich ban
+// lam viec nhom: cong phai chan duoc code hong TRUOC KHI no vao main.
 public class ProductController : Controller
 {
-    // ===== C1 | CWE-89 | CONFIRMED =====
-    // Noi chuoi truc tiep tu tham so q vao cau SELECT.
+    // ===== C1 | da va: tham so hoa @q =====
     public IActionResult Search(string q)
     {
         var rows = new List<string>();
         using var conn = new SqliteConnection(Db.ConnectionString);
         conn.Open();
         var cmd = conn.CreateCommand();
-        cmd.CommandText = "SELECT Id, Name, Category, Price FROM Products WHERE Name LIKE '%" + q + "%'";
+        cmd.CommandText = "SELECT Id, Name, Category, Price FROM Products WHERE Name LIKE @q";
+        cmd.Parameters.AddWithValue("@q", "%" + (q ?? "") + "%");
         try
         {
             using var reader = cmd.ExecuteReader();
@@ -32,15 +35,15 @@ public class ProductController : Controller
         return View(rows);
     }
 
-    // ===== C2 | CWE-89 | CONFIRMED =====
-    // Tham so id khong ep kieu, noi thang vao menh de WHERE.
+    // ===== C2 | da va: tham so hoa @id =====
     public IActionResult Detail(string id)
     {
         var rows = new List<string>();
         using var conn = new SqliteConnection(Db.ConnectionString);
         conn.Open();
         var cmd = conn.CreateCommand();
-        cmd.CommandText = "SELECT Id, Name, Category, Price FROM Products WHERE Id = " + id;
+        cmd.CommandText = "SELECT Id, Name, Category, Price FROM Products WHERE Id = @id";
+        cmd.Parameters.AddWithValue("@id", id ?? "");
         try
         {
             using var reader = cmd.ExecuteReader();
@@ -55,24 +58,21 @@ public class ProductController : Controller
         return View("Search", rows);
     }
 
-    // ===== C3 | CWE-79 | CONFIRMED =====
-    // Gia tri msg di thang ra view va duoc in bang Html.Raw.
+    // ===== C3 | da va: view dung @ViewBag.Msg, Razor tu ma hoa HTML =====
     public IActionResult Echo(string msg)
     {
         ViewBag.Msg = msg;
         return View();
     }
 
-    // ===== C4 | CWE-79 | CONFIRMED =====
-    // Dung HTML tu chuoi noi truc tiep roi tra ve voi content-type text/html.
+    // ===== C4 | da va: tra view, Razor tu ma hoa HTML =====
     public IActionResult Greet(string name)
     {
-        var html = "<h3>Xin chao " + name + "</h3><p>Chuc ban mua sam vui ve.</p>";
-        return Content(html, "text/html");
+        ViewBag.Name = name;
+        return View();
     }
 
-    // ===== C5 | CWE-89 | FILTERED =====
-    // An toan that su: WHERE da tham so hoa.
+    // ===== C5 | an toan tu dau: WHERE da tham so hoa =====
     // Van noi chuoi nhung chi noi ten cot cung, khong lay tu input.
     public IActionResult SafeSearch(string q)
     {
@@ -93,8 +93,7 @@ public class ProductController : Controller
         return View("Search", rows);
     }
 
-    // ===== C6 | CWE-79 | FILTERED =====
-    // An toan that su: da HtmlEncode truoc khi noi vao chuoi HTML.
+    // ===== C6 | an toan tu dau: da HtmlEncode truoc khi noi vao chuoi HTML =====
     public IActionResult SafeGreet(string name)
     {
         var safe = HtmlEncoder.Default.Encode(name ?? "");

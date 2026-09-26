@@ -4,7 +4,8 @@
 
 <h2>Tin nhan cua ban</h2>
 
-<!-- C3 | CWE-79: Html.Raw in thang gia tri nguoi dung nhap, khong ma hoa -->
-<div class="border p-3">@Html.Raw(ViewBag.Msg)</div>
+@* C3 da va: @ViewBag.Msg duoc Razor ma hoa HTML tu dong. Ban co loi tren
+   tag ground-truth dung ham in tho khong ma hoa. *@
+<div class="border p-3">@ViewBag.Msg</div>
 
 <p><a asp-controller="Home" asp-action="Index">Ve trang chu</a></p>
