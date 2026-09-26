@@ -7,9 +7,14 @@ name: Bao mat
 # "no cu": pipeline biet chung, bao cao chung, nhung KHONG chan PR cua nguoi
 # khong gay ra chung - nho baseline. Cong chi chan lo hong MOI.
 
+# Chi quet khi MO PR va khi push vao main. Khong quet moi push len nhanh phu:
+# neu quet ca hai, mot commit tren PR se co HAI check cung ten "security / scan"
+# so voi hai moc khac nhau (nhanh vs main), va ruleset chon cai nao la may rui.
+# Mot PR - mot check - mot moc. Nhanh phu muon duoc quet thi mo PR (draft cung duoc).
 on:
-  push:
   pull_request:
+  push:
+    branches: [main]
   workflow_dispatch:
 
 # Bat buoc khi goi workflow khac: thieu khoi nay thi "Startup failure" ngay.
