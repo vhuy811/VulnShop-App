@@ -1,7 +1,7 @@
 name: Bao mat
 
 # Repo nay KHONG chua pipeline. No goi pipeline dung chung o repo
-# vhuy811/VulnShop-DevSecOps. Sua pipeline o do, moi repo goi toi deu nhan.
+# vhuy811/DevSecOps. Sua pipeline o do, moi repo goi toi deu nhan.
 #
 # Ung dung nay co san lo hong CO Y (xem ground_truth.csv). Bon lo hong do la
 # "no cu": pipeline biet chung, bao cao chung, nhung KHONG chan PR cua nguoi
@@ -19,7 +19,7 @@ permissions:
 
 jobs:
   security:
-    uses: vhuy811/VulnShop-DevSecOps/.github/workflows/devsecops-reusable.yml@main
+    uses: vhuy811/DevSecOps/.github/workflows/devsecops-reusable.yml@main
     with:
       project-file: VulnShop.csproj
       health-path: /Product/List
