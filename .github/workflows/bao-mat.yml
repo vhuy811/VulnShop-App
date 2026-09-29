@@ -3,13 +3,18 @@ name: Bao mat
 # Repo nay KHONG chua pipeline. No goi pipeline dung chung o repo
 # vhuy811/DevSecOps_VHNAT. Sua pipeline o do, moi repo goi toi deu nhan.
 #
-# Ung dung nay co san lo hong CO Y (xem ground_truth.csv). Bon lo hong do la
-# "no cu": pipeline biet chung, bao cao chung, nhung KHONG chan PR cua nguoi
-# khong gay ra chung - nho baseline. Cong chi chan lo hong MOI.
+# main la ban SACH: bon lo hong co y da duoc va, ban goc giu o tag `ground-truth`.
+# AI CHAN MERGE: GitHub, qua ruleset "Require code scanning results" - chi tinh
+# alert MOI trong PR so voi main. Job nay chi quet va day ket qua len, khong chan.
 
+# Chi quet khi MO PR va khi push vao main. Khong quet moi push len nhanh phu:
+# neu quet ca hai, mot commit tren PR se co HAI check cung ten "security / scan"
+# so voi hai moc khac nhau (nhanh vs main), va ruleset chon cai nao la may rui.
+# Mot PR - mot check - mot moc. Nhanh phu muon duoc quet thi mo PR (draft cung duoc).
 on:
-  push:
   pull_request:
+  push:
+    branches: [main]
   workflow_dispatch:
 
 # Bat buoc khi goi workflow khac: thieu khoi nay thi "Startup failure" ngay.
