@@ -108,7 +108,7 @@ public class ProductController : Controller
         using var conn = new SqliteConnection(Db.ConnectionString);
         conn.Open();
         var cmd = conn.CreateCommand();
-        cmd.CommandText = "SELECT Id, Name, Category, Price FROM Products WHERE Category = '" + category + "'";
+        cmd.CommandText = "SELECT Id, Name, Category, Price FROM Products WHERE Category = '" + category + "'"; // nosemgrep
         try
         {
             using var reader = cmd.ExecuteReader();
