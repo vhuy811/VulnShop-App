@@ -32,3 +32,4 @@ git checkout ground-truth
 ## Cho đồng đội
 
 Đọc `HUONG_DAN_DONG_DOI.md` trong repo bộ công cụ. Tóm tắt: không push lên `main`, mỗi việc một nhánh, mở PR, đọc check `security / scan`.
+Chay ung dung: dotnet run
