@@ -8,6 +8,6 @@ document.addEventListener("DOMContentLoaded", function () {
     var ten = new URLSearchParams(window.location.search).get("ten");
     var o = document.getElementById("loi-chao");
     if (ten && o) {
-        o.innerHTML = "Xin chao " + ten;
+        o.textContent = "Xin chao " + ten;
     }
 });

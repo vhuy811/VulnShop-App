@@ -124,15 +124,14 @@ public class ProductController : Controller
         return View("Search", rows);
     }
 
-    // Tim nhanh theo tu khoa: dung dieu kien loc roi doc o ham rieng
+    // Tim nhanh theo tu khoa: dieu kien loc la hang so, gia tri nguoi dung di qua tham so @tu
     public IActionResult TimNhanh(string tu)
     {
-        var dieuKien = "Name LIKE '%" + tu + "%'";
         ViewBag.Query = tu;
-        return View("Search", DocSanPham(dieuKien));
+        return View("Search", DocSanPham("Name LIKE @tu", "@tu", "%" + (tu ?? "") + "%"));
     }
 
-    private static List<string> DocSanPham(string dieuKien)
+    private static List<string> DocSanPham(string dieuKien, string tenThamSo, string giaTri)
     {
         var rows = new List<string>();
         using var conn = new SqliteConnection(Db.ConnectionString);
@@ -140,6 +139,7 @@ public class ProductController : Controller
         var cmd = conn.CreateCommand();
         var cauLenh = "SELECT Id, Name, Category, Price FROM Products WHERE " + dieuKien;
         cmd.CommandText = cauLenh;
+        cmd.Parameters.AddWithValue(tenThamSo, giaTri);
         try
         {
             using var reader = cmd.ExecuteReader();
