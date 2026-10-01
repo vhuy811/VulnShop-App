@@ -124,6 +124,35 @@ public class ProductController : Controller
         return View("Search", rows);
     }
 
+    // Tim nhanh theo tu khoa: dieu kien loc la hang so, gia tri nguoi dung di qua tham so @tu
+    public IActionResult TimNhanh(string tu)
+    {
+        ViewBag.Query = tu;
+        return View("Search", DocSanPham("Name LIKE @tu", "@tu", "%" + (tu ?? "") + "%"));
+    }
+
+    private static List<string> DocSanPham(string dieuKien, string tenThamSo, string giaTri)
+    {
+        var rows = new List<string>();
+        using var conn = new SqliteConnection(Db.ConnectionString);
+        conn.Open();
+        var cmd = conn.CreateCommand();
+        var cauLenh = "SELECT Id, Name, Category, Price FROM Products WHERE " + dieuKien;
+        cmd.CommandText = cauLenh;
+        cmd.Parameters.AddWithValue(tenThamSo, giaTri);
+        try
+        {
+            using var reader = cmd.ExecuteReader();
+            while (reader.Read())
+                rows.Add($"{reader.GetValue(0)} | {reader.GetValue(1)} | {reader.GetValue(2)} | {reader.GetValue(3)}");
+        }
+        catch (SqliteException ex)
+        {
+            rows.Add("SQL error: " + ex.Message);
+        }
+        return rows;
+    }
+
     // ===== Cac endpoint vo hai, dung de tang be mat tan cong =====
     public IActionResult List()
     {
