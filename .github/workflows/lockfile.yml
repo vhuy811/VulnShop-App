@@ -1,8 +1,6 @@
 name: Sinh packages.lock.json
 on:
   workflow_dispatch:
-  push:
-    branches: [g42-lockfile-ci]
 permissions:
   contents: write
 jobs:
