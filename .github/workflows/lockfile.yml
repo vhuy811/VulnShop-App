@@ -1,0 +1,29 @@
+name: Sinh packages.lock.json
+on:
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  lockfile:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '9.0.x'
+      - name: Bat lock-file va restore
+        run: |
+          if ! grep -q RestorePackagesWithLockFile VulnShop.csproj; then
+            sed -i 's|^  </PropertyGroup>|    <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>\n  </PropertyGroup>|' VulnShop.csproj
+          fi
+          dotnet restore --use-lock-file
+      - name: Commit va day nhanh g42-packages-lock
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git checkout -b g42-packages-lock
+          git add VulnShop.csproj packages.lock.json
+          git commit -m "G4.2: them packages.lock.json (pin phien ban NuGet)"
+          git push -f -u origin g42-packages-lock
