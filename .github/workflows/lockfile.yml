@@ -1,6 +1,8 @@
 name: Sinh packages.lock.json
 on:
   workflow_dispatch:
+  push:
+    branches: [g42-lockfile-ci]
 permissions:
   contents: write
 jobs:
@@ -8,6 +10,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: main
       - uses: actions/setup-dotnet@v4
         with:
           dotnet-version: '9.0.x'
