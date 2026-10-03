@@ -40,6 +40,7 @@ public class AccountController : Controller
 
         Response.Cookies.Append("sid", sid, new CookieOptions
         {
+            Secure = true,
             HttpOnly = true,
             SameSite = SameSiteMode.Lax,
         });
