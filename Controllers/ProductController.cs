@@ -177,3 +177,14 @@ public class ProductController : Controller
 
     public IActionResult Pricing() => Content("<h3>Bang gia va chinh sach giao hang</h3>", "text/html");
 }
+    // ===== TEST 1 | SACH: dem san pham theo danh muc (tham so hoa @category) =====
+    public IActionResult CountByCategory(string category)
+    {
+        using var conn = new SqliteConnection(Db.ConnectionString);
+        conn.Open();
+        var cmd = conn.CreateCommand();
+        cmd.CommandText = "SELECT COUNT(*) FROM Products WHERE Category = @category";
+        cmd.Parameters.AddWithValue("@category", category ?? "");
+        var n = cmd.ExecuteScalar();
+        return Content($"So san pham: {n}", "text/plain");
+    }
