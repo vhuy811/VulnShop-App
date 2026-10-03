@@ -5,6 +5,11 @@ using VulnShop.Data;
 
 namespace VulnShop.Controllers;
 
+// Ban tren tag `ground-truth` co bon lo hong gieo co y (C1-C4) de danh gia
+// pipeline; ket qua doi chieu nam trong ground_truth.csv.
+//
+// Ban tren main nay DA VA ca bon. Day la diem xuat phat SACH cho kich ban
+// lam viec nhom: cong phai chan duoc code hong TRUOC KHI no vao main.
 public class ProductController : Controller
 {
     // ===== C1 | da va: tham so hoa @q =====
@@ -68,6 +73,7 @@ public class ProductController : Controller
     }
 
     // ===== C5 | an toan tu dau: WHERE da tham so hoa =====
+    // Van noi chuoi nhung chi noi ten cot cung, khong lay tu input.
     public IActionResult SafeSearch(string q)
     {
         var sortColumn = "Name";
@@ -118,7 +124,7 @@ public class ProductController : Controller
         return View("Search", rows);
     }
 
-    // Tim nhanh theo tu khoa
+    // Tim nhanh theo tu khoa: dieu kien loc la hang so, gia tri nguoi dung di qua tham so @tu
     public IActionResult TimNhanh(string tu)
     {
         ViewBag.Query = tu;
@@ -147,7 +153,7 @@ public class ProductController : Controller
         return rows;
     }
 
-    // ===== Cac endpoint vo hai =====
+    // ===== Cac endpoint vo hai, dung de tang be mat tan cong =====
     public IActionResult List()
     {
         var rows = new List<string>();
@@ -181,5 +187,23 @@ public class ProductController : Controller
         cmd.Parameters.AddWithValue("@category", category ?? "");
         var n = cmd.ExecuteScalar();
         return Content($"So san pham: {n}", "text/plain");
+    }
+
+    // ===== TEST 3 | LO IDOR/BOLA (CWE-639): tra ve Secret cua BAT KY user theo id,
+    // khong kiem quyen so huu. SQL da tham so hoa -> SAST khong bao SQLi; ZAP khong
+    // co active-scan cho IDOR; main chua co .devsecops/idor.json -> DAST-idor rong.
+    // Ky vong: khong cong nao chan -> MERGE DUOC du lo secret (bypass).
+    public IActionResult UserSecret(string id)
+    {
+        string result = "(khong thay)";
+        using var conn = new SqliteConnection(Db.ConnectionString);
+        conn.Open();
+        var cmd = conn.CreateCommand();
+        cmd.CommandText = "SELECT Id, Username, Secret FROM Users WHERE Id = @id";
+        cmd.Parameters.AddWithValue("@id", id ?? "");
+        using var reader = cmd.ExecuteReader();
+        if (reader.Read())
+            result = $"User #{reader.GetValue(0)} ({reader.GetValue(1)}) secret = {reader.GetValue(2)}";
+        return Content(result, "text/plain");
     }
 }
