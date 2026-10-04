@@ -1,0 +1,23 @@
+@{ ViewData["Title"] = "Sign in"; }
+
+<div class="section-head"><h2>Sign in</h2></div>
+
+<div class="panel" style="max-width:420px;margin:0 auto">
+    @if (ViewBag.Error != null)
+    {
+        <div class="error">@ViewBag.Error</div>
+    }
+    <div class="notice">Demo accounts: <b>alice</b> or <b>bob</b> (any password).</div>
+    <form asp-controller="Account" asp-action="Login" method="post">
+        <input type="hidden" name="returnUrl" value="@ViewBag.ReturnUrl" />
+        <div class="form-row">
+            <label>Username</label>
+            <input type="text" name="username" placeholder="alice" required />
+        </div>
+        <div class="form-row">
+            <label>Password</label>
+            <input type="password" name="password" placeholder="••••••" />
+        </div>
+        <button type="submit" class="btn block">Sign in</button>
+    </form>
+</div>
