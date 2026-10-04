@@ -1,0 +1,14 @@
+{
+  "login": {
+    "duong_dan": "/Account/Login",
+    "truong_user": "username",
+    "truong_pass": "password"
+  },
+  "nguoi_dung": [
+    { "ten": "alice", "mat_khau": "alice123" },
+    { "ten": "bob",   "mat_khau": "bob123" }
+  ],
+  "tai_nguyen": [
+    { "mau": "/Order/Details?id={id}", "id_cua": { "alice": "1", "bob": "2" } }
+  ]
+}

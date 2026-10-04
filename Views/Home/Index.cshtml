@@ -1,9 +1,44 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+@model List<VulnShop.Models.Product>
+@{
+    ViewData["Title"] = "Home";
+    var cats = ViewBag.Categories as List<string> ?? new List<string>();
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p id="loi-chao"></p>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<section class="hero">
+    <h1>Gear that keeps up with you</h1>
+    <p>Keyboards, mice, monitors and audio — curated tech for work and play. Fast checkout, honest prices, and a cart that just works.</p>
+    <a class="btn light" asp-controller="Product" asp-action="Index">Browse the shop →</a>
+</section>
+
+<div class="section-head"><h2>Shop by category</h2></div>
+<div class="chips">
+    @foreach (var c in cats)
+    {
+        <a class="chip" asp-controller="Product" asp-action="Index" asp-route-category="@c">@c</a>
+    }
+</div>
+
+<div class="section-head">
+    <h2>Featured products</h2>
+    <a asp-controller="Product" asp-action="Index">View all →</a>
+</div>
+<div class="grid">
+    @foreach (var p in Model)
+    {
+        <div class="card">
+            <div class="thumb" style="background: linear-gradient(135deg, @(p.Color)22, @(p.Color)0d)">@p.Icon</div>
+            <div class="card-body">
+                <div class="cat">@p.Category</div>
+                <h3 class="pname"><a asp-controller="Product" asp-action="Details" asp-route-id="@p.Id">@p.Name</a></h3>
+                <div class="price">@p.Price.ToString("#,##0")₫</div>
+                <div class="card-actions">
+                    <a class="btn ghost sm" asp-controller="Product" asp-action="Details" asp-route-id="@p.Id">Details</a>
+                    <form asp-controller="Cart" asp-action="Add" method="post">
+                        <input type="hidden" name="id" value="@p.Id" />
+                        <button type="submit" class="btn sm">Add to cart</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    }
 </div>

@@ -1,0 +1,22 @@
+@model VulnShop.Models.Product
+@{ ViewData["Title"] = Model.Name; }
+
+<p class="mt"><a asp-controller="Product" asp-action="Index">← Back to shop</a></p>
+
+<div class="detail">
+    <div class="thumb" style="background: linear-gradient(135deg, @(Model.Color)22, @(Model.Color)0d)">@Model.Icon</div>
+    <div>
+        <div class="cat">@Model.Category</div>
+        <h1>@Model.Name</h1>
+        <div class="price">@Model.Price.ToString("#,##0")₫</div>
+        <p class="mt">@Model.Description</p>
+        <form asp-controller="Cart" asp-action="Add" method="post" class="mt">
+            <input type="hidden" name="id" value="@Model.Id" />
+            <label class="muted">Quantity</label>
+            <div class="toolbar">
+                <input class="input" type="number" name="quantity" value="1" min="1" max="20" style="min-width:90px" />
+                <button type="submit" class="btn">Add to cart</button>
+            </div>
+        </form>
+    </div>
+</div>

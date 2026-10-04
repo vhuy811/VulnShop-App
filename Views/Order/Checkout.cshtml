@@ -1,0 +1,36 @@
+@model List<VulnShop.Models.CartItem>
+@{ ViewData["Title"] = "Checkout"; var total = Model.Sum(c => c.LineTotal); }
+
+<div class="section-head"><h2>Checkout</h2></div>
+
+<div class="detail" style="grid-template-columns: 1fr 360px;">
+    <div class="panel">
+        <h3 style="margin-top:0">Shipping details</h3>
+        <form asp-controller="Order" asp-action="PlaceOrder" method="post">
+            <div class="form-row">
+                <label>Full name</label>
+                <input type="text" name="customerName" required />
+            </div>
+            <div class="form-row">
+                <label>Delivery address</label>
+                <textarea name="address" rows="3" required></textarea>
+            </div>
+            <button type="submit" class="btn block">Place order (@total.ToString("#,##0")₫)</button>
+            <p class="muted mt">This is a demo store — no real payment is taken.</p>
+        </form>
+    </div>
+    <div class="panel">
+        <h3 style="margin-top:0">Order summary</h3>
+        @foreach (var item in Model)
+        {
+            <div style="display:flex;justify-content:space-between;margin-bottom:8px">
+                <span>@item.Name × @item.Quantity</span>
+                <span>@item.LineTotal.ToString("#,##0")₫</span>
+            </div>
+        }
+        <hr />
+        <div style="display:flex;justify-content:space-between;font-weight:800">
+            <span>Total</span><span>@total.ToString("#,##0")₫</span>
+        </div>
+    </div>
+</div>

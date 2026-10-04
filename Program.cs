@@ -4,20 +4,27 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllersWithViews();
 
+// Session is used to hold the shopping cart for anonymous visitors.
+builder.Services.AddDistributedMemoryCache();
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromMinutes(30);
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true;
+});
+
 var app = builder.Build();
 
-// ===== G3.3: Security header cho MOI phan hoi =====
-// Lam sach tang runtime cua DAST: CSP, X-Frame-Options, X-Content-Type-Options
-// (rule runtime trong dast_scan.py + chinh-sach-zap.json soi dung ba header nay).
-// Dat o DAU pipeline de phu ca trang tinh (wwwroot), trang dong va trang loi.
-// App co y chay HTTP thuan cho ZAP nen HSTS chi co tac dung khi trien khai HTTPS.
+// Security headers for every response (CSP, anti-clickjacking, no MIME sniffing).
+// Placed first so static files, dynamic pages and error pages are all covered.
+// The app intentionally serves plain HTTP in CI so OWASP ZAP can scan it; HSTS
+// only takes effect behind HTTPS.
 app.Use(async (context, next) =>
 {
     var h = context.Response.Headers;
     h["X-Content-Type-Options"] = "nosniff";
     h["X-Frame-Options"] = "DENY";
     h["Referrer-Policy"] = "no-referrer";
-    // style 'unsafe-inline' de Bootstrap chen style dong duoc; script buoc 'self'.
     h["Content-Security-Policy"] =
         "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; " +
         "img-src 'self' data:; font-src 'self'; object-src 'none'; " +
@@ -31,17 +38,16 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
-// Co y KHONG dung app.UseHttpsRedirection() de OWASP ZAP quet duoc qua HTTP thuan.
+app.UseStaticFiles();
 app.UseRouting();
+app.UseSession();
 app.UseAuthorization();
-app.MapStaticAssets();
 
 app.MapControllerRoute(
-        name: "default",
-        pattern: "{controller=Home}/{action=Index}/{id?}")
-    .WithStaticAssets();
+    name: "default",
+    pattern: "{controller=Home}/{action=Index}/{id?}");
 
-// Tao lai CSDL SQLite voi du lieu mau moi lan khoi dong.
+// Recreate the SQLite catalog with sample data on every start.
 Db.Init();
 
 app.Run();
