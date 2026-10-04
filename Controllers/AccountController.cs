@@ -15,10 +15,12 @@ public class AccountController : Controller
         return View();
     }
 
-    // NOTE: no anti-forgery token here on purpose. The pipeline's authenticated
-    // IDOR probe (DAST-idor) scripts a plain form POST to sign in, so this
-    // endpoint must accept one. Login CSRF is low risk for this demo store.
+    // Anti-forgery protected: the Razor form tag helper injects the token for
+    // real browser users (CWE-352). The authenticated DAST-idor probe cannot
+    // present a token, so IDOR is exercised in a dedicated regression branch
+    // where this protection is deliberately removed to re-introduce the flaw.
     [HttpPost]
+    [ValidateAntiForgeryToken]
     public IActionResult Login(string username, string password, string? returnUrl)
     {
         // Demo accounts only. Map the input to a fixed literal so the value
