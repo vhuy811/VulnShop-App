@@ -1,0 +1,34 @@
+@model VulnShop.Models.Order
+@{ ViewData["Title"] = "Order #" + Model.Id; }
+
+<p class="mt"><a asp-controller="Order" asp-action="MyOrders">← Back to my orders</a></p>
+
+<div class="section-head">
+    <h2>Order #@Model.Id <span class="badge">Confirmed</span></h2>
+</div>
+
+<div class="panel">
+    <p><b>Placed:</b> @Model.CreatedAt</p>
+    <p><b>Ship to:</b> @Model.CustomerName — @Model.Address</p>
+
+    <table class="tbl mt">
+        <thead>
+            <tr><th>Product</th><th class="right">Price</th><th class="right">Qty</th><th class="right">Line total</th></tr>
+        </thead>
+        <tbody>
+            @foreach (var line in Model.Lines)
+            {
+                <tr>
+                    <td>@line.ProductName</td>
+                    <td class="right">@line.Price.ToString("#,##0")₫</td>
+                    <td class="right">@line.Quantity</td>
+                    <td class="right">@line.LineTotal.ToString("#,##0")₫</td>
+                </tr>
+            }
+            <tr>
+                <td colspan="3" class="right"><b>Total</b></td>
+                <td class="right"><b>@Model.Total.ToString("#,##0")₫</b></td>
+            </tr>
+        </tbody>
+    </table>
+</div>
