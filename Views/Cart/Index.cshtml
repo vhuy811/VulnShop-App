@@ -1,0 +1,48 @@
+@model List<VulnShop.Models.CartItem>
+@{ ViewData["Title"] = "Your cart"; var total = Model.Sum(c => c.LineTotal); }
+
+<div class="section-head"><h2>Your cart</h2></div>
+
+@if (Model.Count == 0)
+{
+    <div class="empty">
+        <div class="big">🛒</div>
+        <p>Your cart is empty.</p>
+        <a class="btn" asp-controller="Product" asp-action="Index">Start shopping</a>
+    </div>
+}
+else
+{
+    <table class="tbl">
+        <thead>
+            <tr><th>Product</th><th class="right">Price</th><th class="right">Qty</th><th class="right">Line total</th><th></th></tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.Name</td>
+                    <td class="right">@item.Price.ToString("#,##0")₫</td>
+                    <td class="right">@item.Quantity</td>
+                    <td class="right">@item.LineTotal.ToString("#,##0")₫</td>
+                    <td class="right">
+                        <form asp-controller="Cart" asp-action="Remove" method="post">
+                            <input type="hidden" name="id" value="@item.ProductId" />
+                            <button type="submit" class="btn danger sm">Remove</button>
+                        </form>
+                    </td>
+                </tr>
+            }
+            <tr>
+                <td colspan="3" class="right"><b>Total</b></td>
+                <td class="right"><b>@total.ToString("#,##0")₫</b></td>
+                <td></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="toolbar mt">
+        <a class="btn ghost" asp-controller="Product" asp-action="Index">Continue shopping</a>
+        <a class="btn" asp-controller="Order" asp-action="Checkout">Proceed to checkout →</a>
+    </div>
+}
