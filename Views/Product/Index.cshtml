@@ -1,0 +1,54 @@
+@model List<VulnShop.Models.Product>
+@{
+    ViewData["Title"] = "Shop";
+    var cats = ViewBag.Categories as List<string> ?? new List<string>();
+    string? active = ViewBag.Category as string;
+    string? query = ViewBag.Query as string;
+}
+
+<div class="section-head"><h2>Shop</h2></div>
+
+<form method="get" asp-controller="Product" asp-action="Index" class="toolbar">
+    <input class="input" type="text" name="q" value="@query" placeholder="Search products..." />
+    @if (!string.IsNullOrEmpty(active))
+    {
+        <input type="hidden" name="category" value="@active" />
+    }
+    <button type="submit" class="btn">Search</button>
+</form>
+
+<div class="chips">
+    <a class="chip @(string.IsNullOrEmpty(active) ? "active" : "")" asp-controller="Product" asp-action="Index">All</a>
+    @foreach (var c in cats)
+    {
+        <a class="chip @(c == active ? "active" : "")" asp-controller="Product" asp-action="Index" asp-route-category="@c">@c</a>
+    }
+</div>
+
+@if (Model.Count == 0)
+{
+    <div class="empty"><div class="big">🔍</div><p>No products matched your search.</p></div>
+}
+else
+{
+    <div class="grid">
+        @foreach (var p in Model)
+        {
+            <div class="card">
+                <div class="thumb" style="background: linear-gradient(135deg, @(p.Color)22, @(p.Color)0d)">@p.Icon</div>
+                <div class="card-body">
+                    <div class="cat">@p.Category</div>
+                    <h3 class="pname"><a asp-controller="Product" asp-action="Details" asp-route-id="@p.Id">@p.Name</a></h3>
+                    <div class="price">@p.Price.ToString("#,##0")₫</div>
+                    <div class="card-actions">
+                        <a class="btn ghost sm" asp-controller="Product" asp-action="Details" asp-route-id="@p.Id">Details</a>
+                        <form asp-controller="Cart" asp-action="Add" method="post">
+                            <input type="hidden" name="id" value="@p.Id" />
+                            <button type="submit" class="btn sm">Add to cart</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}
