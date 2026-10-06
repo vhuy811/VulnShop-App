@@ -66,10 +66,7 @@ public class OrderController : Controller
         var order = Db.GetOrder(id);
         if (order == null) return NotFound();
 
-        // Object-level authorization: only the owner may view the order.
-        if (!string.Equals(order.Owner, user, StringComparison.Ordinal))
-            return StatusCode(403, "You are not allowed to view this order.");
-
+        // === DEMO VULN (CWE-639 IDOR/BOLA) - xoa sau khi quay ===
         return View(order);
     }
 }
