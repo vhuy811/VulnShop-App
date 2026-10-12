@@ -6,7 +6,7 @@
     string? query = ViewBag.Query as string;
 }
 
-<div class="section-head"><h2>Shop</h2></div>
+<div class="section-head"><h2>Shop</h2><span class="muted">@Model.Count products</span></div>
 
 <form method="get" asp-controller="Product" asp-action="Index" class="toolbar">
     <input class="input" type="text" name="q" value="@query" placeholder="Search products..." />
