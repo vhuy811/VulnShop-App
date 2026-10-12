@@ -27,7 +27,12 @@ jobs:
     uses: vhuy811/DevSecOps_VHNAT/.github/workflows/devsecops-reusable.yml@main
     with:
       project-file: VulnShop.csproj
-      health-path: /Product/List
+      # /Product -> ProductController.Index: trang that, co truy van CSDL.
+      # Truoc day tro toi /Product/List - action do da bi xoa khi dung lai
+      # app (PR #16) nen moi lan chay deu nhan 404. Pipeline van chay tiep
+      # vi bat ky phan hoi nao duoi 500 cung tinh la app da len, nhung the
+      # la mat han y nghia cua phep kiem.
+      health-path: /Product
       run-dast: true
       title: VulnShop
       # Ghim tag thay vi main khi bo cong cu da on dinh:
