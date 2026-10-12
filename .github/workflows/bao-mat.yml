@@ -21,6 +21,10 @@ on:
 permissions:
   contents: read
   security-events: write
+  # Job nhan-dien cua workflow dung chung doc danh sach tep doi trong PR.
+  # Thieu dong nay thi CA LAN CHAY chet o buoc khoi dong (Startup failure)
+  # va khong co canh bao bao mat nao - da xay ra that o lan chay #52.
+  pull-requests: read
 
 jobs:
   security:
