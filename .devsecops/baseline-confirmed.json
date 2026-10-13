@@ -1,0 +1,17 @@
+{
+  "_doc": "Van tay cac phat hien DAST ma cong xac nhan DA GAP tren nhanh main. Cong bo qua nhung van tay nay va chi chan phat hien MOI. Day khong phai cong tat: moi dong phai ghi ro phat hien nao, da xac minh toi dau, va ai chiu trach nhiem. Van tay = nguon|cwe|endpoint|tham_so.",
+  "van_tay": [
+    "zap|89|/Product|q"
+  ],
+  "giai_thich": [
+    {
+      "van_tay": "zap|89|/Product|q",
+      "zap_bao": "SQL Injection (CWE-89), payload 'ZAP AND 1=1 --'",
+      "doc_ma_thay_gi": "NGHI BAO NHAM. Chi co mot handler nhan tham so q la ProductController.Index; no truyen q vao Db.GetProducts, noi q duoc bind bang AddWithValue('@search', '%' + search + '%'). Trong ca Data/Db.cs KHONG co dong nao noi bien vao chuoi SQL - moi cau lenh deu tham so hoa. Chuoi tan cong di vao do chi tro thanh mot chuoi tim kiem literal.",
+      "vi_sao_van_khai_bao": "Cong xac nhan chay fail-closed: chua khai bao gi thi coi main la sach, nen MOT phat hien tren main lam KHOA TOAN BO pull request - ke ca PR vo can. Khai bao de go ket, KHONG phai de cong nhan rang day la lo hong that.",
+      "con_phai_lam": "Xac minh bang tay: dung ZAP ban lai dung payload do vao /Product?q= va so phan hoi, hoac doc lai bao cao ZAP xem no can cu vao dau. Xac minh xong thi hoac go dong nay khoi baseline (neu la bao nham that), hoac doi sang muc lo hong can sua.",
+      "nguoi_chiu_trach_nhiem": "Le Viet Huy - 2387700020",
+      "pham_vi": "CHI nhanh main cua kho thuc nghiem."
+    }
+  ]
+}
