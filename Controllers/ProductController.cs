@@ -5,14 +5,16 @@ namespace VulnShop.Controllers;
 
 public class ProductController : Controller
 {
-    // Catalog with optional category filter and name search.
-    // Both inputs flow into parameterized queries in Db.GetProducts.
-    public IActionResult Index(string? category, string? q)
+    // Catalog with optional category filter, name search and price range.
+    // Every input flows into a parameterized query in Db.GetProducts.
+    public IActionResult Index(string? category, string? q, decimal? minPrice, decimal? maxPrice)
     {
         ViewBag.Categories = Db.GetCategories();
         ViewBag.Category = category;
         ViewBag.Query = q;
-        var products = Db.GetProducts(category, q);
+        ViewBag.MinPrice = minPrice;
+        ViewBag.MaxPrice = maxPrice;
+        var products = Db.GetProducts(category, q, minPrice, maxPrice);
         return View(products);
     }
 

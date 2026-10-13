@@ -76,7 +76,8 @@ public static class Db
         cmd.ExecuteNonQuery();
     }
 
-    public static List<Product> GetProducts(string? category = null, string? search = null)
+    public static List<Product> GetProducts(string? category = null, string? search = null,
+                                            decimal? minPrice = null, decimal? maxPrice = null)
     {
         var list = new List<Product>();
         using var conn = new SqliteConnection(ConnectionString);
@@ -92,6 +93,16 @@ public static class Db
         {
             sql += " AND Name LIKE @search";
             cmd.Parameters.AddWithValue("@search", "%" + search + "%");
+        }
+        if (minPrice.HasValue)
+        {
+            sql += " AND Price >= @minPrice";
+            cmd.Parameters.AddWithValue("@minPrice", minPrice.Value);
+        }
+        if (maxPrice.HasValue)
+        {
+            sql += " AND Price <= @maxPrice";
+            cmd.Parameters.AddWithValue("@maxPrice", maxPrice.Value);
         }
         sql += " ORDER BY Id";
         cmd.CommandText = sql;

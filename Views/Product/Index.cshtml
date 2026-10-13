@@ -4,6 +4,8 @@
     var cats = ViewBag.Categories as List<string> ?? new List<string>();
     string? active = ViewBag.Category as string;
     string? query = ViewBag.Query as string;
+    var minPrice = ViewBag.MinPrice as decimal?;
+    var maxPrice = ViewBag.MaxPrice as decimal?;
 }
 
 <div class="section-head"><h2>Shop</h2><span class="muted">@Model.Count products</span></div>
@@ -14,6 +16,8 @@
     {
         <input type="hidden" name="category" value="@active" />
     }
+    <input class="input" type="number" name="minPrice" value="@minPrice" placeholder="Min price" min="0" step="1000" />
+    <input class="input" type="number" name="maxPrice" value="@maxPrice" placeholder="Max price" min="0" step="1000" />
     <button type="submit" class="btn">Search</button>
 </form>
 
