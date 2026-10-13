@@ -23,7 +23,9 @@ app.Use(async (context, next) =>
 {
     var h = context.Response.Headers;
     h["X-Content-Type-Options"] = "nosniff";
-    h["X-Frame-Options"] = "DENY";
+    // LO HONG 10 - bo X-Frame-Options "de nhung duoc bao cao vao iframe".
+    // Tang bat duoc: lop DAST-runtime (T5).
+    // h["X-Frame-Options"] = "DENY";
     h["Referrer-Policy"] = "no-referrer";
     h["Content-Security-Policy"] =
         "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; " +

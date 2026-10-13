@@ -1,0 +1,14 @@
+@{
+    ViewData["Title"] = "Sales report";
+    var rows = ViewBag.Rows as List<string> ?? new List<string>();
+    string? region = ViewBag.Region as string;
+}
+
+<div class="section-head"><h2>Sales report</h2><span class="muted">@rows.Count rows</span></div>
+
+<form method="get" asp-controller="AdminReport" asp-action="Sales" class="toolbar">
+    <input class="input" type="text" name="region" value="@region" placeholder="Category..." />
+    <button type="submit" class="btn">Run report</button>
+</form>
+
+<pre class="card" style="padding:16px; overflow:auto">@string.Join("\n", rows)</pre>
