@@ -1,0 +1,14 @@
+@{
+    ViewData["Title"] = "Review";
+    var comment = ViewBag.Comment as string ?? "";
+}
+
+<div class="section-head"><h2>Your review</h2></div>
+
+<div class="card">
+    <div class="card-body">
+        @Html.Raw(comment)
+    </div>
+</div>
+
+<p><a class="btn ghost sm" asp-controller="Product" asp-action="Index">Back to shop</a></p>
