@@ -90,8 +90,8 @@ public static class Db
         }
         if (!string.IsNullOrWhiteSpace(search))
         {
-            sql += " AND Name LIKE @search";
-            cmd.Parameters.AddWithValue("@search", "%" + search + "%");
+            // === DEMO VULN (CWE-89 SQL Injection) - xoa sau khi quay ===
+            sql += " AND Name LIKE '%" + search + "%'";
         }
         sql += " ORDER BY Id";
         cmd.CommandText = sql;

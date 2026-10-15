@@ -2,10 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace VulnShop.Controllers;
 
-// Minimal cookie-based sign-in for the demo shop. Authentication strength is
-// intentionally out of scope here; the session cookie value is only ever set
-// server-side to a known username (mapped from a literal), never to raw input,
-// so it cannot be used to inject response headers.
+// Minimal cookie-based sign-in for the demo shop.
 public class AccountController : Controller
 {
     [HttpGet]
@@ -15,16 +12,12 @@ public class AccountController : Controller
         return View();
     }
 
-    // Anti-forgery protected: the Razor form tag helper injects the token for
-    // real browser users (CWE-352). The authenticated DAST-idor probe cannot
-    // present a token, so IDOR is exercised in a dedicated regression branch
-    // where this protection is deliberately removed to re-introduce the flaw.
+    // SECURITY REGRESSION TEST ONLY: anti-forgery protection removed on purpose
+    // so CodeQL re-reports CWE-352 and the authenticated DAST-idor probe can
+    // sign in to exercise the IDOR endpoint. Reverted before merge.
     [HttpPost]
-    [ValidateAntiForgeryToken]
     public IActionResult Login(string username, string password, string? returnUrl)
     {
-        // Demo accounts only. Map the input to a fixed literal so the value
-        // written to the cookie is never tainted by the request.
         string? sid = username switch
         {
             "alice" => "alice",
