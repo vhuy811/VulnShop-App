@@ -17,6 +17,16 @@
     <button type="submit" class="btn">Search</button>
 </form>
 
+<form method="post" asp-controller="Product" asp-action="Find" class="toolbar">
+    <input class="input" type="text" name="term" placeholder="Advanced search (name or description)..." />
+    <select class="input" name="sortBy">
+        <option value="Id">Relevance</option>
+        <option value="Price">Price</option>
+        <option value="Name">Name</option>
+    </select>
+    <button type="submit" class="btn">Find</button>
+</form>
+
 <div class="chips">
     <a class="chip @(string.IsNullOrEmpty(active) ? "active" : "")" asp-controller="Product" asp-action="Index">All</a>
     @foreach (var c in cats)

@@ -16,6 +16,17 @@ public class ProductController : Controller
         return View(products);
     }
 
+    // Advanced search posted from the shop toolbar.
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public IActionResult Find(string term, string? sortBy)
+    {
+        ViewBag.Categories = Db.GetCategories();
+        ViewBag.Query = term;
+        var products = Db.FindProducts(term, sortBy);
+        return View("Index", products);
+    }
+
     // Product detail page.
     public IActionResult Details(int id)
     {

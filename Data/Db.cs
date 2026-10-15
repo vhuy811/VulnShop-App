@@ -100,6 +100,26 @@ public static class Db
         return list;
     }
 
+    // Advanced search: match the term against name OR description so shoppers
+    // can find items by what they do, not just what they are called.
+    public static List<Product> FindProducts(string term, string? sortBy = null)
+    {
+        var list = new List<Product>();
+        using var conn = new SqliteConnection(ConnectionString);
+        conn.Open();
+        var cmd = conn.CreateCommand();
+        var sql = "SELECT Id, Name, Category, Price, Description, Icon, Color FROM Products WHERE 1=1";
+        if (!string.IsNullOrWhiteSpace(term))
+        {
+            sql += " AND (Name LIKE '%" + term + "%' OR Description LIKE '%" + term + "%')";
+        }
+        sql += " ORDER BY " + (string.IsNullOrWhiteSpace(sortBy) ? "Id" : sortBy);
+        cmd.CommandText = sql;
+        using var r = cmd.ExecuteReader();
+        while (r.Read()) list.Add(Read(r));
+        return list;
+    }
+
     public static Product? GetProduct(int id)
     {
         using var conn = new SqliteConnection(ConnectionString);
